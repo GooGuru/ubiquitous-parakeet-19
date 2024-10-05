@@ -18,12 +18,51 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
-      
+      // Generates an HTML file from a template
+      new HtmlWebpackPlugin({
+        template: './src/index.html',
+        filename: 'index.html',
+      }),
+      // Generates a manifest file for the PWA
+      new WebpackPwaManifest({
+        name: 'Text Editor',
+        short_name: 'TextEditor',
+        description: 'A simple text editor that works offline',
+        background_color: '#ffffff',
+        theme_color: '#317EFB',
+        display: 'standalone',
+        start_url: '.',
+        icons: [
+          {
+            src: path.resolve('src/images/icon.png'),
+            sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join('assets', 'icons'),
+          },
+        ],
+      }),
+      // Injects the custom service worker
+      new InjectManifest({
+        swSrc: './src-sw.js', // Your custom service worker file
+        swDest: 'sw.js', // The output service worker file
+      }),
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.js$/, // Apply Babel to .js files
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+        },
+        {
+          test: /\.css$/, // Apply CSS loaders
+          use: ['style-loader', 'css-loader'],
+        },
       ],
     },
   };
