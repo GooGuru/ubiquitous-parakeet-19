@@ -3,29 +3,24 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const path = require('path');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
-// TODO: Add and configure workbox plugins for a service worker and manifest file.
-// TODO: Add CSS loaders and babel to webpack.
-
 module.exports = () => {
   return {
     mode: 'development',
     entry: {
-      main: './client/src/js/index.js',
-   install: './client/src/js/install.js',
+      main: './client/src/js/index.js', // Ensure this path is correct
+      install: './client/src/js/install.js', // Ensure this path is correct
     },
     output: {
       filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'client/dist'), // Ensure this path is correct
     },
     plugins: [
-      // Generates an HTML file from a template
       new HtmlWebpackPlugin({
-        template: './src/index.html',
+        template: './client/src/index.html', // Ensure this path is correct
         filename: 'index.html',
       }),
-      // Generates a manifest file for the PWA
       new WebpackPwaManifest({
-        name: 'Text Editor',
+        name: 'J.A.T.E',
         short_name: 'TextEditor',
         description: 'A simple text editor that works offline',
         background_color: '#ffffff',
@@ -34,19 +29,17 @@ module.exports = () => {
         start_url: '.',
         icons: [
           {
-            src: path.resolve('src/images/icon.png'),
+            src: path.resolve('client/src/images/icon.png'),
             sizes: [96, 128, 192, 256, 384, 512],
             destination: path.join('assets', 'icons'),
           },
         ],
       }),
-      // Injects the custom service worker
       new InjectManifest({
-        swSrc: './src-sw.js', // Your custom service worker file
-        swDest: 'sw.js', // The output service worker file
+        swSrc: './client/src/src-sw.js', // Ensure this path is correct
+        swDest: 'sw.js',
       }),
     ],
-
     module: {
       rules: [
         {
